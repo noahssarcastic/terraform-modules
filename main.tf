@@ -61,3 +61,11 @@ resource "aws_dynamodb_table" "terraform_locks" {
     type = "S"
   }
 }
+
+output "backend" {
+  value = templatefile("${path.module}/backend.tftpl", {
+    bucket         = aws_s3_bucket.terraform_state.bucket
+    region         = var.region
+    dynamodb_table = aws_dynamodb_table.terraform_locks.arn
+  })
+}
