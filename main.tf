@@ -16,19 +16,25 @@ provider "aws" {
 
 resource "aws_s3_bucket" "terraform_state" {
   bucket_prefix = var.prefix
+}
 
-  # Enable versioning to retain history of state files
-  versioning {
-    enabled = true
-  }
+resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state" {
+  bucket = aws_s3_bucket.terraform_state.id
 
-  # Enable server-side encryption by default
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+  # Enable AES256 server-side encryption by default.
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
+  }
+}
+
+resource "aws_s3_bucket_versioning" "terraform_state" {
+  bucket = aws_s3_bucket.terraform_state.id
+
+  # Enable versioning to retain history of state files.
+  versioning_configuration {
+    status = "Enabled"
   }
 }
 
