@@ -1,6 +1,9 @@
-variable "prefix" {
-  type        = string
-  description = "Each resource in this deployment will be given a name starting with this prefix."
+variable "bucket" {
+  type = string
+}
+
+variable "table" {
+  type = string
 }
 
 variable "region" {

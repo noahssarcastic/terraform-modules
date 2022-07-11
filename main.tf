@@ -15,7 +15,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "terraform_state" {
-  bucket_prefix = var.prefix
+  bucket = var.bucket
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state" {
@@ -49,7 +49,7 @@ resource "aws_s3_bucket_public_access_block" "terraform_state" {
 }
 
 resource "aws_dynamodb_table" "terraform_locks" {
-  name = "${var.prefix}-locks"
+  name = var.table
 
   # Should stay within free tier.
   billing_mode = "PAY_PER_REQUEST"
@@ -62,10 +62,10 @@ resource "aws_dynamodb_table" "terraform_locks" {
   }
 }
 
-output "backend" {
-  value = templatefile("${path.module}/backend.tftpl", {
-    bucket         = aws_s3_bucket.terraform_state.bucket
-    region         = var.region
-    dynamodb_table = aws_dynamodb_table.terraform_locks.arn
-  })
-}
+# output "backend" {
+#   value = templatefile("${path.module}/backend.tftpl", {
+#     bucket         = data.aws_s3_bucket.terraform_state.bucket
+#     region         = var.region
+#     dynamodb_table = aws_dynamodb_table.terraform_locks.name
+#   })
+# }
