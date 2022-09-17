@@ -37,12 +37,12 @@ variable "prefix" {
 }
 
 variable "security_groups" {
-  type        = [string]
+  type        = list(string)
   description = "The list of security group ids the instances will use."
   default     = []
 }
 
 variable "subnet_ids" {
-  type        = [string]
+  type        = list(string)
   description = "The list of subnets the ASG will provision instances into."
 }
